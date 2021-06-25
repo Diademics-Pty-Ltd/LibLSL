@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LSL.Internal
 {
-    internal class ContinuousResolver : LSLObject
+    internal class ContinuousResolver : LSLObject, IContinuousResolver
     {
 
-        public Action<IEnumerable<IStreamInfo>> OnGotResult { get;  set; } = null; 
+        public Action<IEnumerable<IStreamInfo>> OnGotResult { get; set; } = null;
 
         public ContinuousResolver(double forgetAfter = 5.0)
-            : base(DllHandler.lsl_create_continuous_resolver(forgetAfter)){ }
+            : base(DllHandler.lsl_create_continuous_resolver(forgetAfter)) { }
 
-        public ContinuousResolver(string prop, string value, double forgetAfter = 5.0)
-            : base(DllHandler.lsl_create_continuous_resolver_byprop(prop, value, forgetAfter)) { }
+        public ContinuousResolver(string property, string value, double forgetAfter = 5.0)
+            : base(DllHandler.lsl_create_continuous_resolver_byprop(property, value, forgetAfter)) { }
 
-        public ContinuousResolver(string pred, double forgetAfter = 5.0)
-            : base(DllHandler.lsl_create_continuous_resolver_bypred(pred, forgetAfter)) { }
+        public ContinuousResolver(string predicate, double forgetAfter = 5.0)
+            : base(DllHandler.lsl_create_continuous_resolver_bypred(predicate, forgetAfter)) { }
 
         public IEnumerable<IStreamInfo> Results()
         {
@@ -28,12 +26,6 @@ namespace LSL.Internal
             for (int k = 0; k < streams; k++)
                 streamInfos.Add(StreamInfoFactory.Create((buf[k])));
             return streamInfos;
-        }
-
-        public async Task ResultsAsync()
-        {
-            IEnumerable<IStreamInfo> streamInfos = await Task.Run(() => Results());
-            OnGotResult?.Invoke(streamInfos);
         }
 
         protected override void DestroyLSLObject(IntPtr obj)
