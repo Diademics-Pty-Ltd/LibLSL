@@ -5,7 +5,7 @@ namespace LSL.Internal
 {
     internal static class Error
     { 
-        public static void CheckError(int ec)
+        public static void Check(int ec)
         {
             if (ec < 0)
                 throw ec switch

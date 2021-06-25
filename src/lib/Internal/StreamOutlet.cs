@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LSL.Internal
@@ -9,10 +6,10 @@ namespace LSL.Internal
     internal class StreamOutlet : LSLObject, IStreamOutlet
     {
         public bool HaveConsumers => (DllHandler.lsl_have_consumers(Obj) > 0);
-        public bool WaitForConsumers(double timeout = Constants.Forever) => (DllHandler.lsl_wait_for_consumers(Obj, timeout) > 0);
+        
         public IStreamInfo Info => StreamInfoFactory.Create(DllHandler.lsl_get_info(Obj));
 
-
+        public bool WaitForConsumers(double timeout = Constants.Forever) => (DllHandler.lsl_wait_for_consumers(Obj, timeout) > 0);
 
         public StreamOutlet(IStreamInfo info, int chunkSize = 0, int maxBuffered = 360)
             : base(DllHandler.lsl_create_outlet(info.DangerousGetHandle, chunkSize, maxBuffered)) { }
