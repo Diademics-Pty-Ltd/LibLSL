@@ -7,7 +7,7 @@ namespace LSL.Internal
     internal class ContinuousResolver : LSLObject, IContinuousResolver
     {
 
-        public Action<IEnumerable<IStreamInfo>> OnGotResult { get; set; } = null;
+        public Action<IEnumerable<IStreamInfo>> OnGotResult { get; set; }
 
         public ContinuousResolver(double forgetAfter = 5.0)
             : base(DllHandler.lsl_create_continuous_resolver(forgetAfter)) { }

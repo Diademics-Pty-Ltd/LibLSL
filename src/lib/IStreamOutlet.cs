@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LSL
 {
-    public interface IStreamOutlet
+    public interface IStreamOutlet : IDisposable
     {
         public bool HaveConsumers { get; }
         public IStreamInfo Info { get; }

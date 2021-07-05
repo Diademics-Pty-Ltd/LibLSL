@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace LSL
 {
-    public interface IContinuousResolver
+    public interface IContinuousResolver : IDisposable
     {
         public Action<IEnumerable<IStreamInfo>> OnGotResult { get; set; }
         public IEnumerable<IStreamInfo> Results();

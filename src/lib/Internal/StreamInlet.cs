@@ -5,14 +5,29 @@ namespace LSL.Internal
 {
     internal class StreamInlet : LSLObject, IStreamInlet
     {
+        private PostProcessingOptions _postProcessingOptions;
+        public Action<double> OnGotNewSample { get; set; }
+
+        public Action<int> OnGotNewChunk { get; set; }
 
         public int SamplesAvailable => (int)DllHandler.lsl_samples_available(Obj);
-        public bool WasClockReset => (DllHandler.lsl_was_clock_reset(Obj) != 0);
+
+        public bool WasClockReset => DllHandler.lsl_was_clock_reset(Obj) != 0;
+
+        public PostProcessingOptions PostProcessingOptions
+        {
+            get => _postProcessingOptions;
+            set
+            {
+                Error.Check(DllHandler.lsl_set_postprocessing(Obj, value));
+                _postProcessingOptions = value;
+            }
+        }
 
         public StreamInlet(IStreamInfo info, int maxBufferLength = 360, int maxChunkLength = 0, bool recover = true, PostProcessingOptions postProcessingOptions = PostProcessingOptions.None)
             : base(DllHandler.lsl_create_inlet(info.DangerousGetHandle, maxBufferLength, maxChunkLength, recover ? 1 : 0))
         {
-            _ = DllHandler.lsl_set_postprocessing(Obj, postProcessingOptions);
+            PostProcessingOptions = postProcessingOptions;
         }
 
         public IStreamInfo Info(double timeout = Constants.Forever)
@@ -40,10 +55,15 @@ namespace LSL.Internal
             return timeCorrection;
         }
 
-        public double PullSample(float[] sample, double timeout = Constants.Forever) 
+        public void SetPostProcessingOptions(PostProcessingOptions postProcessingOptions)
+        {
+
+        }
+
+        public double PullSample(float[] sample, double timeout = Constants.Forever)
         { 
             int ec = 0; 
-            double timestamp = DllHandler.lsl_pull_sample_f(Obj, sample, sample.Length, timeout, ref ec); 
+            double timestamp = DllHandler.lsl_pull_sample_f(Obj, sample, sample.Length, timeout, ref ec);
             Error.Check(ec); 
             return timestamp; 
         }

@@ -19,8 +19,12 @@ namespace LSL.Internal
 #if LSL_PRINT_OBJECT_LIFETIMES
             System.Console.Out.WriteLine($"Created object {obj:X}");
 #endif
-            if (obj == IntPtr.Zero) throw new InternalException("Error creating object");
-            this.SetHandle(obj);
+            if (obj == IntPtr.Zero)
+            {
+                throw new InternalException("Error creating object");
+            }
+
+            SetHandle(obj);
         }
 
         public override bool IsInvalid => handle == IntPtr.Zero;

@@ -3,7 +3,7 @@ using System;
 
 namespace LSL
 {
-    public interface IStreamInfo
+    public interface IStreamInfo : IDisposable
     {
         public string Name { get; }
         public string Type { get; }

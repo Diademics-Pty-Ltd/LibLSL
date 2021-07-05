@@ -38,7 +38,7 @@ namespace LSL.Internal
                 return xmlDocument;
             }
         }
-        public new IntPtr DangerousGetHandle => base.DangerousGetHandle();
+        public new IntPtr DangerousGetHandle => DangerousGetHandle();
 
         public StreamInfo(string name,
             string type,
@@ -55,6 +55,6 @@ namespace LSL.Internal
 
         public StreamInfo(IntPtr handle) : base(handle) { }
 
-        protected override void DestroyLSLObject(IntPtr obj) { DllHandler.lsl_destroy_streaminfo(obj); }
+        protected override void DestroyLSLObject(IntPtr obj) { _ = DllHandler.lsl_destroy_streaminfo(obj); }
     }
 }
