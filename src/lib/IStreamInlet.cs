@@ -8,6 +8,9 @@ namespace LSL
 {
     public interface IStreamInlet : IDisposable
     {
+        /// <summary cref="PullSampleAsync">
+        /// Set this action to fire when PullSampleAsync is completed.
+        /// </summary>
         public Action<double> OnGotNewSample { get; set; }
 
         public Action<int> OnGotNewChunk { get; set; }

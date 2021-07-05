@@ -3,6 +3,9 @@ using System;
 
 namespace LSL
 {
+    /// <summary>
+    /// Interface representing an LSL StreamInfo object
+    /// </summary>
     public interface IStreamInfo : IDisposable
     {
         public string Name { get; }

@@ -32,9 +32,9 @@ namespace LSL.Internal
 
         public IStreamInfo Info(double timeout = Constants.Forever)
         {
-            int ec = 0; 
-            IntPtr res = DllHandler.lsl_get_fullinfo(Obj, timeout, ref ec); 
-            Error.Check(ec); 
+            int ec = 0;
+            IntPtr res = DllHandler.lsl_get_fullinfo(Obj, timeout, ref ec);
+            Error.Check(ec);
             return StreamInfoFactory.Create(res);
         }
 
@@ -53,11 +53,6 @@ namespace LSL.Internal
             double timeCorrection = DllHandler.lsl_time_correction(Obj, timeout, ref ec);
             Error.Check(ec);
             return timeCorrection;
-        }
-
-        public void SetPostProcessingOptions(PostProcessingOptions postProcessingOptions)
-        {
-
         }
 
         public double PullSample(float[] sample, double timeout = Constants.Forever)
