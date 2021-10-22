@@ -1,6 +1,6 @@
 ﻿namespace LSL
 {
-    public static class Utils
+    public static class LSLUtils
     {
         public static int ProtocolVersion => DllHandler.lsl_protocol_version();
         public static int LibraryVersion => DllHandler.lsl_library_version();
