@@ -1,7 +1,7 @@
 ﻿using System;
 using LSL.Properties;
 
-namespace LSL.Internal
+namespace LSL
 {
     internal static class Error
     { 
@@ -14,7 +14,7 @@ namespace LSL.Internal
                     -2 => new LostException(ExceptionMessages.StreamLost),
                     -3 => new ArgumentException(ExceptionMessages.Argument),
                     -4 => new InternalException(ExceptionMessages.Internal),
-                    _ => new Exception(ExceptionMessages.Anything),
+                    _ => new InternalException(ExceptionMessages.Anything),
                 };
         }
     }

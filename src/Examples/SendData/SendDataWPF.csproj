@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LSL-dotnet" Version="1.0.1" />
+    <ProjectReference Include="..\..\lib\LSL-dotnet.csproj" />
   </ItemGroup>
 
   <ItemGroup>

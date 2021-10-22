@@ -9,8 +9,6 @@ using System.Windows.Input;
 
 namespace SendDataWPF
 {
-
-
     internal class BoolRadioConverter : IValueConverter
     {
         public bool Inverse { get; set; }

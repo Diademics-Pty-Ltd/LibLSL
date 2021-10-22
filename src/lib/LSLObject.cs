@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace LSL.Internal
+namespace LSL
 {
     /// <summary>
     /// abstract base class for interop objects
     /// This class was lifted directly from liblsl: https://github.com/labstreaminglayer/liblsl-Csharp/blob/master/LSL.cs#L870-L876
     /// </summary>
-    internal abstract class LSLObject : SafeHandle
+    public abstract class LSLObject : SafeHandle
     {
         // shared const fields
 

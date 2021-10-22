@@ -1,0 +1,43 @@
+﻿<Window x:Class="StreamDiagnosisWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StreamDiagnosisWPF"
+        mc:Ignorable="d"
+        Title="Stream Diagnosis" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance local:ViewModel}" 
+        x:ClassModifier="internal">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical"
+                    Grid.Column="0">
+            <Label Content="Select Stream:"/>
+            <ComboBox ItemsSource="{Binding StreamInfos}"
+                      SelectedItem="{Binding SelectedStreamInfo}"
+                      Margin="5"/>
+            <Button Content="Refresh"
+                    Margin="5"/>
+            <GroupBox Header="Post Processing Options"
+                      Margin="5">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox Content="Clock Sync"
+                              IsChecked="{Binding ClockSync}"
+                              Margin="5"/>
+                    <CheckBox Content="Dejitter"
+                              IsChecked="{Binding Dejitter}"
+                               Margin="5"/>
+                    <CheckBox Content="Monotonize"
+                              IsChecked="{Binding Monotonize}"
+                              Margin="5"/>
+                    <CheckBox Content="Thread Safe"
+                              IsChecked="{Binding ThreadSafe}"
+                              Margin="5"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</Window>

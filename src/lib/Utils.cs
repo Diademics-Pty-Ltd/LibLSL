@@ -1,6 +1,4 @@
-﻿using LSL.Internal;
-
-namespace LSL
+﻿namespace LSL
 {
     public static class Utils
     {

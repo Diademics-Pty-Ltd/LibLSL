@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace LSL.Internal
+namespace LSL
 {
-    internal class StreamInlet : LSLObject, IStreamInlet
+    public class StreamInlet : LSLObject
     {
         private PostProcessingOptions _postProcessingOptions;
         public Action<double> OnGotNewSample { get; set; }
@@ -24,18 +24,18 @@ namespace LSL.Internal
             }
         }
 
-        public StreamInlet(IStreamInfo info, int maxBufferLength = 360, int maxChunkLength = 0, bool recover = true, PostProcessingOptions postProcessingOptions = PostProcessingOptions.None)
+        public StreamInlet(StreamInfo info, int maxBufferLength = 360, int maxChunkLength = 0, bool recover = true, PostProcessingOptions postProcessingOptions = PostProcessingOptions.None)
             : base(DllHandler.lsl_create_inlet(info.DangerousGetHandle, maxBufferLength, maxChunkLength, recover ? 1 : 0))
         {
             PostProcessingOptions = postProcessingOptions;
         }
 
-        public IStreamInfo Info(double timeout = Constants.Forever)
+        public StreamInfo Info(double timeout = Constants.Forever)
         {
             int ec = 0;
             IntPtr res = DllHandler.lsl_get_fullinfo(Obj, timeout, ref ec);
             Error.Check(ec);
-            return StreamInfoFactory.Create(res);
+            return new(res);
         }
 
         public void OpenStream(double timeout = Constants.Forever)

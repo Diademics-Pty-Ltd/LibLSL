@@ -1,10 +1,7 @@
-﻿using System;
-using LSL;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LSL;
+using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SendDataWPF
 {
@@ -109,6 +106,7 @@ namespace SendDataWPF
 
         }
     }
+
     internal class LSLSendSimulatorM
     {
 
@@ -122,19 +120,22 @@ namespace SendDataWPF
         public async Task StartSenderAsync(string name, string type, int channels, double samplingRate, ChannelFormatType channelFormatType, string uniqueID, int chunkSize, bool sinusChecked)
         {
             _cancellationTokenSource = new();
-            using IStreamInfo streamInfo = StreamInfoFactory.Create(name,
+            using StreamInfo simulatorInfo = new(name,
                  type, channels, samplingRate, channelFormatType, uniqueID);
-            using IStreamOutlet streamOutlet = StreamOutletFactory.Create(streamInfo, chunkSize);
-            await Task.Run(() => SendData(streamOutlet, channels, chunkSize, channelFormatType, sinusChecked, samplingRate));
+            using StreamInfo markerInfo = new(name + "Mrkrs",
+                 "Markers", 1, 0, ChannelFormatType.StringType, uniqueID + "Mrkrs");
+            using StreamOutlet simulatorOutlet = new(simulatorInfo, chunkSize);
+            using StreamOutlet markerOutlet = new(markerInfo);
+            await Task.Run(() => SendData(simulatorOutlet, markerOutlet, channels, chunkSize, channelFormatType, sinusChecked, samplingRate));
         }
 
-        public void StopSender()
-        {
-            _cancellationTokenSource.Cancel();
-        }
+        public void StopSender() => _cancellationTokenSource.Cancel();
 
-        private void SendData(IStreamOutlet streamOutlet, int channels, int chunkSize, ChannelFormatType channelFormatType, bool sinusChecked, double samplingRate)
+        private void SendData(StreamOutlet eegOutlet, StreamOutlet markerOutlet, int channels, int chunkSize, ChannelFormatType channelFormatType, bool sinusChecked, double samplingRate)
         {
+            string[] randomMarkers = new string[] { "1", "23skidoo", "lala" };
+            string[] markerOut = new string[1];
+            Random random = new();
             using DataGenerator dataGenerator = new(channels, chunkSize, sinusChecked, samplingRate);
             while (true)
             {
@@ -143,13 +144,13 @@ namespace SendDataWPF
                 switch (channelFormatType)
                 {
                     case ChannelFormatType.DoubleSixtyFour:
-                        _ = streamOutlet.PushChunk(dataGenerator.GenerateDoubleData());
+                        eegOutlet.PushChunk(dataGenerator.GenerateDoubleData());
                         break;
                     case ChannelFormatType.FloatThirtyTwo:
-                        _ = streamOutlet.PushChunk(dataGenerator.GenerateDoubleData());
+                        eegOutlet.PushChunk(dataGenerator.GenerateFloatData());
                         break;
                     case ChannelFormatType.IntThirtyTwo:
-                        _ = streamOutlet.PushChunk(dataGenerator.GenerateDoubleData());
+                        eegOutlet.PushChunk(dataGenerator.GenerateIntData());
                         break;
                     case ChannelFormatType.StringType:
                     case ChannelFormatType.IntSixteen:
@@ -158,6 +159,11 @@ namespace SendDataWPF
                     case ChannelFormatType.UndefinedType:
                     default:
                         break;
+                }
+                if (random.Next(500) > 490)
+                {
+                    markerOut[0] = randomMarkers[random.Next(randomMarkers.Length)];
+                    markerOutlet.PushSample(markerOut);
                 }
                 Thread.Sleep((int)(1000.0 / samplingRate) * chunkSize);
             }

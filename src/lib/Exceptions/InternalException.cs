@@ -1,4 +1,4 @@
-﻿namespace LSL.Internal
+﻿namespace LSL
 {
     /// <summary>
     /// Internal exception class for LSL

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace LSL.Internal
+namespace LSL
 {
-    internal class ContinuousResolver : LSLObject, IContinuousResolver
+    public sealed class ContinuousResolver : LSLObject
     {
 
-        public Action<IEnumerable<IStreamInfo>> OnGotResult { get; set; }
+        public Action<IEnumerable<StreamInfo>> OnGotResult { get; set; }
 
         public ContinuousResolver(double forgetAfter = 5.0)
             : base(DllHandler.lsl_create_continuous_resolver(forgetAfter)) { }
@@ -18,13 +17,13 @@ namespace LSL.Internal
         public ContinuousResolver(string predicate, double forgetAfter = 5.0)
             : base(DllHandler.lsl_create_continuous_resolver_bypred(predicate, forgetAfter)) { }
 
-        public IEnumerable<IStreamInfo> Results()
+        public IEnumerable<StreamInfo> Results()
         {
             IntPtr[] buf = new IntPtr[1024];
             int streams = DllHandler.lsl_resolver_results(Obj, buf, (uint)buf.Length);
-            List<IStreamInfo> streamInfos = new();
+            List<StreamInfo> streamInfos = new();
             for (int k = 0; k < streams; k++)
-                streamInfos.Add(StreamInfoFactory.Create((buf[k])));
+                streamInfos.Add(new(buf[k]));
             return streamInfos;
         }
 

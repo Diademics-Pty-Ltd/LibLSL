@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Xml;
 
-namespace LSL.Internal
+namespace LSL
 {
-    internal class StreamInfo : LSLObject, IStreamInfo
+    public class StreamInfo : LSLObject
     {
         public string Name => Marshal.PtrToStringAnsi(DllHandler.lsl_get_name(Obj));
         public string Type => Marshal.PtrToStringAnsi(DllHandler.lsl_get_type(Obj));
@@ -17,7 +17,7 @@ namespace LSL.Internal
         public string UniqueIdentifier => Marshal.PtrToStringAnsi(DllHandler.lsl_get_uid(Obj));
         public string SessionIdentifier => Marshal.PtrToStringAnsi(DllHandler.lsl_get_session_id(Obj));
         public string SourceHostname => Marshal.PtrToStringAnsi(DllHandler.lsl_get_hostname(Obj));
-        public IXmlElement Desc => XmlElementFactory.Create(DllHandler.lsl_get_desc(Obj));
+        public XmlElement Desc => new(DllHandler.lsl_get_desc(Obj));
         public string FullMetaDataAsString
         {
             get

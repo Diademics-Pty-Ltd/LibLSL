@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace LSL.Internal
+namespace LSL
 {
     internal class DllHandler
     {
