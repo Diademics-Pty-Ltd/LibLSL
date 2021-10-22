@@ -10,15 +10,12 @@ namespace LSL
 
         public StreamInfo Info => new(DllHandler.lsl_get_info(Obj));
 
-        public bool WaitForConsumers(double timeout = Constants.Forever) => DllHandler.lsl_wait_for_consumers(Obj, timeout) > 0;
+        public bool WaitForConsumers(double timeout = LSLConstants.Forever) => DllHandler.lsl_wait_for_consumers(Obj, timeout) > 0;
 
         public StreamOutlet(StreamInfo info, int chunkSize = 0, int maxBuffered = 360)
             : base(DllHandler.lsl_create_outlet(info.DangerousGetHandle, chunkSize, maxBuffered)) { }
 
-        protected override void DestroyLSLObject(IntPtr obj)
-        {
-            DllHandler.lsl_destroy_outlet(obj);
-        }
+        protected override void DestroyLSLObject(IntPtr obj) => DllHandler.lsl_destroy_outlet(obj);
 
         public void PushSample<T>(T[] data, double timestamp = 0.0, bool pushthrough = true) where T : struct
         {

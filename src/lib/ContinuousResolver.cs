@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace LSL
 {
-    public sealed class ContinuousResolver : LSLObject
+    public class ContinuousResolver : LSLObject
     {
-
         public Action<IEnumerable<StreamInfo>> OnGotResult { get; set; }
 
         public ContinuousResolver(double forgetAfter = 5.0)
@@ -27,10 +26,6 @@ namespace LSL
             return streamInfos;
         }
 
-        protected override void DestroyLSLObject(IntPtr obj)
-        {
-            DllHandler.lsl_destroy_continuous_resolver(obj);
-        }
-
+        protected override void DestroyLSLObject(IntPtr obj) => DllHandler.lsl_destroy_continuous_resolver(obj);
     }
 }

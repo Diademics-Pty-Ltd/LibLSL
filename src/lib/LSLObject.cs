@@ -10,10 +10,8 @@ namespace LSL
     public abstract class LSLObject : SafeHandle
     {
         // shared const fields
-
-
         public IntPtr Obj { get => handle; }
-        
+
         public LSLObject(IntPtr obj) : base(IntPtr.Zero, true)
         {
 #if LSL_PRINT_OBJECT_LIFETIMES

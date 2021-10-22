@@ -43,7 +43,7 @@ namespace LSL
         public StreamInfo(string name,
             string type,
             int channels = 1,
-            double nominalSamplingRate = Constants.IrregularRate,
+            double nominalSamplingRate = LSLConstants.IrregularRate,
             ChannelFormatType channelFormatType = ChannelFormatType.FloatThirtyTwo,
             string sourceIdentifier = "") : base(DllHandler.lsl_create_streaminfo(name,
             type,
@@ -55,6 +55,6 @@ namespace LSL
 
         public StreamInfo(IntPtr handle) : base(handle) { }
 
-        protected override void DestroyLSLObject(IntPtr obj) { _ = DllHandler.lsl_destroy_streaminfo(obj); }
+        protected override void DestroyLSLObject(IntPtr obj) => _ = DllHandler.lsl_destroy_streaminfo(obj);
     }
 }

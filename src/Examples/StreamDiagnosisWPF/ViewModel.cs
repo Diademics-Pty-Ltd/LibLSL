@@ -7,22 +7,22 @@ namespace StreamDiagnosisWPF
 {
     internal sealed class ViewModel : Notifier
     {
-        private IContinuousResolver _continuousResolver;
+        private ContinuousResolver _continuousResolver;
         private int _selectedStreamInfo;
-        private List<IStreamInfo> _streamInfos;
+        private List<StreamInfo> _streamInfos;
         private bool _clockSync;
         private bool _dejitter;
         private bool _monotonize;
         private bool _threadSafe;
 
-        public ICommand Refresh => new Command(async _ => await RefreshImplAsync());
+        //public ICommand Refresh => new Command(async _ => await RefreshImplAsync());
 
         public int SelectedStramInfo
         {
             get => _selectedStreamInfo;
             set => Update(ref _selectedStreamInfo, value);
         }
-        public List<IStreamInfo> StreamInfos
+        public List<StreamInfo> StreamInfos
         {
             get => _streamInfos;
             set => Update(ref _streamInfos, value);
@@ -51,17 +51,17 @@ namespace StreamDiagnosisWPF
         public ViewModel()
         {
             StreamInfos = new();
-            _continuousResolver = ContinuousResolverFactory.Create();
+            _continuousResolver = new();
             _continuousResolver.OnGotResult = OnGotResults;
         }
 
-        private void OnGotResults(IEnumerable<IStreamInfo> streamInfos)
+        private void OnGotResults(IEnumerable<StreamInfo> streamInfos)
         {
             StreamInfos = new();
-            foreach (IStreamInfo info in streamInfos)
+            foreach (StreamInfo info in streamInfos)
                 StreamInfos.Add(info);
         }
 
-        private async Task RefreshImplAsync() => await _continuousResolver.ResultsAsync();
+        //private async Task RefreshImplAsync() => await _continuousResolver.ResultsAsync();
     }
 }
