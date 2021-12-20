@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="IChunk.cs" />
+    <Compile Remove="IDataChunk.cs" />
+    <Compile Remove="IMarkerChunk.cs" />
+    <Compile Remove="Internal\DataChunk.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\ExceptionMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

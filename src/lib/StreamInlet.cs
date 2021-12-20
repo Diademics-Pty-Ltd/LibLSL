@@ -6,12 +6,8 @@ namespace LSL
     public class StreamInlet : LSLObject
     {
         private PostProcessingOptions _postProcessingOptions;
-        public Action<double> OnGotNewSample { get; set; }
-
-        public Action<int> OnGotNewChunk { get; set; }
 
         public int SamplesAvailable => (int)DllHandler.lsl_samples_available(Obj);
-
         public bool WasClockReset => DllHandler.lsl_was_clock_reset(Obj) != 0;
 
         public PostProcessingOptions PostProcessingOptions
@@ -24,18 +20,16 @@ namespace LSL
             }
         }
 
-        public StreamInlet(StreamInfo info, int maxBufferLength = 360, int maxChunkLength = 0, bool recover = true, PostProcessingOptions postProcessingOptions = PostProcessingOptions.None)
-            : base(DllHandler.lsl_create_inlet(info.DangerousGetHandle, maxBufferLength, maxChunkLength, recover ? 1 : 0))
-        {
-            PostProcessingOptions = postProcessingOptions;
-        }
+        public StreamInfo StreamInfo { get; }
 
-        public StreamInfo Info(double timeout = LSLConstants.Forever)
+        public StreamInlet(StreamInfo streamInfo, int maxBufferLength = 360, int maxChunkLength = 0, bool recover = true, PostProcessingOptions postProcessingOptions = PostProcessingOptions.None, double timeout=LSLConstants.Forever)
+            : base(DllHandler.lsl_create_inlet(streamInfo.DangerousGetHandle, maxBufferLength, maxChunkLength, recover ? 1 : 0))
         {
             int ec = 0;
             IntPtr res = DllHandler.lsl_get_fullinfo(Obj, timeout, ref ec);
             Error.Check(ec);
-            return new(res);
+            StreamInfo = new(res);
+            PostProcessingOptions = postProcessingOptions;
         }
 
         public void OpenStream(double timeout = LSLConstants.Forever)
@@ -65,7 +59,7 @@ namespace LSL
                     timestamp = DllHandler.lsl_pull_sample_f(Obj, castData, castData.Length, timeout, ref ec);
                     break;
                 case double[] castData:
-                    timestamp = DllHandler.lsl_pull_sample_d(Obj, castData, castData.Length,  timeout, ref ec);
+                    timestamp = DllHandler.lsl_pull_sample_d(Obj, castData, castData.Length, timeout, ref ec);
                     break;
                 case int[] castData:
                     timestamp = DllHandler.lsl_pull_sample_i(Obj, castData, castData.Length, timeout, ref ec);
@@ -76,6 +70,8 @@ namespace LSL
                 case char[] castData:
                     timestamp = DllHandler.lsl_pull_sample_c(Obj, castData, castData.Length, timeout, ref ec);
                     break;
+                default:
+                    break;
             }
             Error.Check(ec);
             return timestamp;
@@ -84,7 +80,7 @@ namespace LSL
         public double PullSample(string[] sample, double timeout = LSLConstants.Forever)
         {
             int ec = 0;
-            IntPtr[] tmp = new IntPtr[sample.Length];
+            var tmp = new IntPtr[sample.Length];
             double timestamp = DllHandler.lsl_pull_sample_str(Obj, tmp, tmp.Length, timeout, ref ec);
             Error.Check(ec);
             try
@@ -121,11 +117,13 @@ namespace LSL
                 case char[,] castData:
                     res = DllHandler.lsl_pull_chunk_c(Obj, castData, timestamps, (uint)castData.Length, (uint)timestamps.Length, timeout, ref ec);
                     break;
+                default:
+                    break;
             }
             Error.Check(ec);
             return (int)res / data.GetLength(1);
         }
-        
+
         protected override void DestroyLSLObject(IntPtr obj) => DllHandler.lsl_destroy_inlet(obj);
     }
 }

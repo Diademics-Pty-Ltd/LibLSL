@@ -4,7 +4,7 @@ using LSL.Properties;
 namespace LSL
 {
     internal static class Error
-    { 
+    {
         public static void Check(int ec)
         {
             if (ec < 0)

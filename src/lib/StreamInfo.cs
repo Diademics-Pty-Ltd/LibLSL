@@ -18,6 +18,7 @@ namespace LSL
         public string SessionIdentifier => Marshal.PtrToStringAnsi(DllHandler.lsl_get_session_id(Obj));
         public string SourceHostname => Marshal.PtrToStringAnsi(DllHandler.lsl_get_hostname(Obj));
         public XmlElement Desc => new(DllHandler.lsl_get_desc(Obj));
+
         public string FullMetaDataAsString
         {
             get
@@ -29,7 +30,7 @@ namespace LSL
             }
         }
         public XmlDocument FullMetaDataAsXml
-        { 
+        {
             get
             {
                 IntPtr pXml = DllHandler.lsl_get_xml(Obj);
@@ -38,6 +39,7 @@ namespace LSL
                 return xmlDocument;
             }
         }
+
         public new IntPtr DangerousGetHandle => DangerousGetHandle();
 
         public StreamInfo(string name,

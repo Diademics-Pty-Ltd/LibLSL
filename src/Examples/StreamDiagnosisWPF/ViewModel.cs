@@ -17,7 +17,7 @@ namespace StreamDiagnosisWPF
 
         //public ICommand Refresh => new Command(async _ => await RefreshImplAsync());
 
-        public int SelectedStramInfo
+        public int SelectedStreamInfo
         {
             get => _selectedStreamInfo;
             set => Update(ref _selectedStreamInfo, value);

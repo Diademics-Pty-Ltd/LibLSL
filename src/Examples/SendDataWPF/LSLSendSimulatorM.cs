@@ -68,10 +68,7 @@ namespace SendDataWPF
             {
                 for (int j = 0; j < _channels; j++)
                 {
-                    if (_isSinus)
-                        datum = (float)(1000.0 * (Math.Sin(_frequencyMultipliers[j] * _phase) + 1.0));
-                    else
-                        datum = _random.Next(0, 999);
+                    datum = _isSinus ? (float)(1000.0 * (Math.Sin(_frequencyMultipliers[j] * _phase) + 1.0)) : _random.Next(0, 999);
                     _floatData[i, j] = datum;
                 }
                 _phase += _phaseIncrement;
@@ -88,10 +85,7 @@ namespace SendDataWPF
             {
                 for (int j = 0; j < _channels; j++)
                 {
-                    if (_isSinus)
-                        datum = 1000.0 * (Math.Sin(_frequencyMultipliers[j] * _phase) + 1.0);
-                    else
-                        datum = _random.Next(0, 999);
+                    datum = _isSinus ? 1000.0 * (Math.Sin(_frequencyMultipliers[j] * _phase) + 1.0) : _random.Next(0, 999);
                     _doubleData[i, j] = datum;
                 }
                 _phase += _phaseIncrement;
@@ -133,7 +127,9 @@ namespace SendDataWPF
 
         private void SendData(StreamOutlet eegOutlet, StreamOutlet markerOutlet, int channels, int chunkSize, ChannelFormatType channelFormatType, bool sinusChecked, double samplingRate)
         {
-            string[] randomMarkers = new string[] { "1", "23skidoo", "lala" };
+            //string[] randomMarkers = new string[] { "1", "23skidoo", "lala" };
+            string[] oneZeroMarkers = new string[] { "0", "1" };
+            int markerIndex = 0;
             string[] markerOut = new string[1];
             Random random = new();
             using DataGenerator dataGenerator = new(channels, chunkSize, sinusChecked, samplingRate);
@@ -160,9 +156,11 @@ namespace SendDataWPF
                     default:
                         break;
                 }
-                if (random.Next(500) > 490)
+                if (random.Next(500) > 495)
                 {
-                    markerOut[0] = randomMarkers[random.Next(randomMarkers.Length)];
+                    //markerOut[0] = randomMarkers[random.Next(randomMarkers.Length)];
+                    markerOut[0] = oneZeroMarkers[markerIndex];
+                    markerIndex = markerIndex == 0 ? 1 : 0;
                     markerOutlet.PushSample(markerOut);
                 }
                 Thread.Sleep((int)(1000.0 / samplingRate) * chunkSize);
