@@ -2,7 +2,6 @@
 {
     public enum PostProcessingOptions
     {
-
         None = 0,
         ClockSync = 1,
         Dejitter = 2,

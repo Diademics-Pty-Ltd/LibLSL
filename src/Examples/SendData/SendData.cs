@@ -8,7 +8,7 @@ namespace Examples
     {
         public static void Main()
         {
-            Random random = new();  
+            Random random = new();
             using var streamInfo = new StreamInfo("TestCSharp", "EEG", channels: 8, nominalSamplingRate: 100, sourceIdentifier: "lala");
             using var streamOutlet = new StreamOutlet(streamInfo);
             float[] data = new float[8];
@@ -16,8 +16,8 @@ namespace Examples
             while (!Console.KeyAvailable)
             {
                 // generate random data and send it
-                for (int k = 0; k < data.Length; k++)
-                    data[k] = random.Next(-100, 100);
+                for (int ch = 0; ch < data.Length; ch++)
+                    data[ch] = random.Next(-100, 100);
                 streamOutlet.PushSample(data);
                 Thread.Sleep(10);
             }

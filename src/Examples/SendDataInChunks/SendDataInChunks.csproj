@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\lib\LSL-dotnet.csproj" />
+    <ProjectReference Include="..\..\lib\LSL-dotnet.csproj" />
   </ItemGroup>
+
+
 </Project>

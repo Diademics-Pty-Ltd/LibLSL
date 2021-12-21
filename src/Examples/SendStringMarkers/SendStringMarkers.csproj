@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\lib\LSL-dotnet.csproj" />
+    <ProjectReference Include="..\..\lib\LSL-dotnet.csproj" />
   </ItemGroup>
+
 
 </Project>
