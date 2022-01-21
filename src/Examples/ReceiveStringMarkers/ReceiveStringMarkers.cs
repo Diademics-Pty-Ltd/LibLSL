@@ -1,4 +1,4 @@
-﻿using LSL;
+﻿using LibLSL;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -31,14 +31,18 @@ namespace Examples
             double timeNow = LSLUtils.LocalClock;
             while (_isRunning)
             {
+                double timestamp = 0.0;
                 try
                 {
-                    double timestamp = _streamInlet.PullSample(_markers);
-                    _onPull(_markers, timestamp);
-                    timeNow = LSLUtils.LocalClock;
+                    timestamp = _streamInlet.PullSample(_markers);
                 }
-                catch (Exception)
-                { }
+                catch (InternalException)
+                {
+                    // handle internal LSL error here
+                }
+                _onPull(_markers, timestamp);
+                timeNow = LSLUtils.LocalClock;
+
             }
 
         }

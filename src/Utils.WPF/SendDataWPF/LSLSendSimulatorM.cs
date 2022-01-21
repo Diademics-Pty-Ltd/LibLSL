@@ -1,4 +1,4 @@
-﻿using LSL;
+﻿using LibLSL;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

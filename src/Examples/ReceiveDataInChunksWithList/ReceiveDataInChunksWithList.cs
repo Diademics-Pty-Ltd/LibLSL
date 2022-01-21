@@ -5,49 +5,45 @@ using System.Threading;
 
 namespace Examples
 {
-    public sealed class ReceiveData : IDisposable
+    public sealed class ReceiveDataInChunksWithList : IDisposable
     {
-        private readonly Action<float[], double> _onPull;
+        private readonly Action<List<List<float>>, List<double>> _onPull;
         private readonly Thread _thread;
         private readonly StreamInlet _streamInlet;
-        private readonly float[] _sample;
+        private readonly List<List<float>> _samples;
+        private readonly List<double> _timestamps;
         private bool _isRunning = true;
-        public ReceiveData(Action<float[], double> onPull)
+        public ReceiveDataInChunksWithList(Action<List<List<float>>, List<double>> onPull)
         {
             _onPull = onPull;
             try
             {
                 IReadOnlyList<StreamInfo> streamInfos = LSLUtils.ResolveStreams("type", "EEG");
-
-
                 _streamInlet = new(streamInfos[0]);
-                _sample = new float[streamInfos[0].Channels];
+                _samples = new();
+                _timestamps = new();
             }
-            catch (InternalException)
-            {
-                // handle internal LSL error here
-            }
-
+            catch (SystemException)
+            { }
             _thread = new(PullLoop);
             _thread.Start();
         }
         private void PullLoop()
         {
             double timeNow = LSLUtils.LocalClock;
-            double timestamp = 0.0;
             while (_isRunning)
             {
                 try
                 {
-                    timestamp = _streamInlet.PullSample(_sample);
+                    _streamInlet.PullChunk(_samples, _timestamps);
                 }
-                catch (InternalException)
+                catch (InternalException ex)
                 {
-                    // handle internal LSL error here
+                    Console.WriteLine(ex.Message);
                 }
-                if (LSLUtils.LocalClock > timeNow + 1)
+                if ((LSLUtils.LocalClock > timeNow + 1) && (_samples.Count > 0))
                 {
-                    _onPull(_sample, timestamp);
+                    _onPull(_samples, _timestamps);
                     timeNow = LSLUtils.LocalClock;
                 }
             }
@@ -60,17 +56,16 @@ namespace Examples
                 _thread.Join();
         }
     }
-
-    public class Program
+    internal class Program
     {
-        private static Action<float[], double> PrintFormattedSamples => (samples, timestamp) =>
-            Console.WriteLine($"Received value {samples[0]} on channel 0 at time {timestamp}");
+        private static Action<List<List<float>>, List<double>> PrintFormattedSamples => (samples, timestamp) =>
+            Console.WriteLine($"Received value {samples[0][0]} on channel 0 at time {timestamp[0]}");
 
         public static void Main()
         {
             try
             {
-                ReceiveData receiveData = new(PrintFormattedSamples);
+                ReceiveDataInChunksWithList receiveDataInChunks = new(PrintFormattedSamples);
             }
             catch (Exception)
             { }

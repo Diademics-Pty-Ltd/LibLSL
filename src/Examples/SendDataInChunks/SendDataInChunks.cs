@@ -1,5 +1,5 @@
 ﻿using System;
-using LSL;
+using LibLSL;
 using System.Threading;
 
 namespace SendDataInChunks

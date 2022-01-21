@@ -1,4 +1,4 @@
-﻿using LSL;
+﻿using LibLSL;
 using SendDataWPF.Resources;
 using System;
 using System.Collections.ObjectModel;

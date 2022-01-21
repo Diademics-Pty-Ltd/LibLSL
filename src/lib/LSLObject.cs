@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace LSL
+namespace LibLSL
 {
     /// <summary>
     /// abstract base class for interop objects

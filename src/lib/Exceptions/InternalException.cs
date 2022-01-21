@@ -1,4 +1,4 @@
-﻿namespace LSL
+﻿namespace LibLSL
 {
     /// <summary>
     /// Internal exception class for LSL

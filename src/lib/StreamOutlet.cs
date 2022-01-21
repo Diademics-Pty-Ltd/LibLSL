@@ -1,6 +1,7 @@
 ﻿using System;
+using LibLSL.Internal;
 
-namespace LSL
+namespace LibLSL
 {
     public sealed class StreamOutlet : LSLObject
     {

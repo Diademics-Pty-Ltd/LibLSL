@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ReceiveDataInChunksWithList": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

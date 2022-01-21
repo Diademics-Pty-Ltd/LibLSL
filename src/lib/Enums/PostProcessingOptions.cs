@@ -1,4 +1,4 @@
-﻿namespace LSL
+﻿namespace LibLSL
 {
     public enum PostProcessingOptions
     {

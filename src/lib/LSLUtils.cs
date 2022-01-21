@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using LibLSL.Internal;
 
-namespace LSL
+namespace LibLSL
 {
     public static class LSLUtils
     {

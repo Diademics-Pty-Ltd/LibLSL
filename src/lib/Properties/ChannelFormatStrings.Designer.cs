@@ -22,14 +22,14 @@ namespace LibLSL.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ExceptionMessages {
+    internal class ChannelFormatStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ExceptionMessages() {
+        internal ChannelFormatStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace LibLSL.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LibLSL.Properties.ExceptionMessages", typeof(ExceptionMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LibLSL.Properties.ChannelFormatStrings", typeof(ChannelFormatStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,74 @@ namespace LibLSL.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An unknown error has occurred..
+        ///   Looks up a localized string similar to double64.
         /// </summary>
-        internal static string Anything {
+        internal static string Double64 {
             get {
-                return ResourceManager.GetString("Anything", resourceCulture);
+                return ResourceManager.GetString("Double64", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An argument was incorrectly specified (e.g., wrong format or wrong length)..
+        ///   Looks up a localized string similar to float32.
         /// </summary>
-        internal static string Argument {
+        internal static string Float32 {
             get {
-                return ResourceManager.GetString("Argument", resourceCulture);
+                return ResourceManager.GetString("Float32", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An internal internal error has occurred..
+        ///   Looks up a localized string similar to int16.
         /// </summary>
-        internal static string Internal {
+        internal static string Int16 {
             get {
-                return ResourceManager.GetString("Internal", resourceCulture);
+                return ResourceManager.GetString("Int16", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The stream has been lost..
+        ///   Looks up a localized string similar to int32.
         /// </summary>
-        internal static string StreamLost {
+        internal static string Int32 {
             get {
-                return ResourceManager.GetString("StreamLost", resourceCulture);
+                return ResourceManager.GetString("Int32", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The operation failed due to a timeout..
+        ///   Looks up a localized string similar to int64.
         /// </summary>
-        internal static string Timeout {
+        internal static string Int64 {
             get {
-                return ResourceManager.GetString("Timeout", resourceCulture);
+                return ResourceManager.GetString("Int64", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to int8.
+        /// </summary>
+        internal static string Int8 {
+            get {
+                return ResourceManager.GetString("Int8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to string.
+        /// </summary>
+        internal static string String {
+            get {
+                return ResourceManager.GetString("String", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to undefined.
+        /// </summary>
+        internal static string Undefined {
+            get {
+                return ResourceManager.GetString("Undefined", resourceCulture);
             }
         }
     }

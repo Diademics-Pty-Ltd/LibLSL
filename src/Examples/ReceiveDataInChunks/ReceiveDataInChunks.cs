@@ -1,4 +1,4 @@
-﻿using LSL;
+﻿using LibLSL;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -23,8 +23,10 @@ namespace Examples
                 _samples = new float[512, streamInfos[0].Channels];
                 _timestamps = new double[512];
             }
-            catch (SystemException)
-            { }
+            catch (InternalException)
+            {
+                //handle internal LSL error here
+            }
             _thread = new(PullLoop);
             _thread.Start();
         }
@@ -35,18 +37,20 @@ namespace Examples
             {
                 try
                 {
-                    int sampleCount = _streamInlet.PullChunk(_samples,_timestamps);
-                    if (LSLUtils.LocalClock > timeNow + 1)
-                    {
-                        _onPull(_samples, _timestamps);
-                        timeNow = LSLUtils.LocalClock;
-                    }
+                    int sampleCount = _streamInlet.PullChunk(_samples, _timestamps);
                 }
-                catch (Exception)
-                { }
+                catch (InternalException)
+                {
+                    //handle internal LSL errors here
+                }
+                if (LSLUtils.LocalClock > timeNow + 1)
+                {
+                    _onPull(_samples, _timestamps);
+                    timeNow = LSLUtils.LocalClock;
+                }
             }
-
         }
+
         public void Dispose()
         {
             _isRunning = false;

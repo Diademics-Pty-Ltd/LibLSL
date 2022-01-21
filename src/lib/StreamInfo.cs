@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Xml;
+using LibLSL.Internal;
 
-namespace LSL
+namespace LibLSL
 {
     public class StreamInfo : LSLObject
     {
+        private readonly ChannelFormat _channelFormat;
+
         public string Name => Marshal.PtrToStringAnsi(DllHandler.lsl_get_name(Obj));
         public string Type => Marshal.PtrToStringAnsi(DllHandler.lsl_get_type(Obj));
         public int Channels => DllHandler.lsl_get_channel_count(Obj);
         public double NominalSamplingRate => DllHandler.lsl_get_nominal_srate(Obj);
-        public ChannelFormatType ChannelFormat => DllHandler.lsl_get_channel_format(Obj);
+        public ChannelFormat ChannelFormat => _channelFormat;
+        public ChannelFormatType ChannelFormatType => DllHandler.lsl_get_channel_format(Obj);
         public string SourceIdentifier => Marshal.PtrToStringAnsi(DllHandler.lsl_get_source_id(Obj));
         public int Version => DllHandler.lsl_get_version(Obj);
         public double CreatedAt => DllHandler.lsl_get_created_at(Obj);
@@ -52,10 +56,9 @@ namespace LSL
             channels,
             nominalSamplingRate,
             channelFormatType,
-            sourceIdentifier))
-        { }
+            sourceIdentifier)) => _channelFormat = new(channelFormatType);
 
-        public StreamInfo(IntPtr handle) : base(handle) { }
+        public StreamInfo(IntPtr handle) : base(handle) => _channelFormat = new(ChannelFormatType);
 
         protected override void DestroyLSLObject(IntPtr obj) => _ = DllHandler.lsl_destroy_streaminfo(obj);
     }
