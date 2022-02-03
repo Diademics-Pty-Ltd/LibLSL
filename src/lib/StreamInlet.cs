@@ -8,7 +8,7 @@ namespace LibLSL
     public class StreamInlet : LSLObject
     {
         private PostProcessingOptions _postProcessingOptions;
-        private readonly GenericSampleBuffer _genericSampleBuffer;
+        private readonly GenericListsToArrays _sampleBuffer;
 
         public int SamplesAvailable => (int)DllHandler.lsl_samples_available(Obj);
         public bool WasClockReset => DllHandler.lsl_was_clock_reset(Obj) != 0;
@@ -33,7 +33,7 @@ namespace LibLSL
             Error.Check(ec);
             StreamInfo = new(res);
             PostProcessingOptions = postProcessingOptions;
-            _genericSampleBuffer = new(streamInfo.Channels * streamInfo.ChannelFormat.Size);
+            _sampleBuffer = new(streamInfo.Channels * streamInfo.ChannelFormat.Size);
         }
 
         public void OpenStream(double timeout = LSLConstants.Forever)
@@ -63,19 +63,19 @@ namespace LibLSL
             switch (StreamInfo.ChannelFormat.Type)
             {
                 case ChannelFormatType.FloatThirtyTwo:
-                    timestamp = DllHandler.lsl_pull_sample_f(Obj, _genericSampleBuffer.FloatBuffer, _genericSampleBuffer.FloatBufferCount, timeout, ref ec);
+                    timestamp = DllHandler.lsl_pull_sample_f(Obj, _sampleBuffer.FloatBuffer, _sampleBuffer.FloatBufferCount, timeout, ref ec);
                     break;
                 case ChannelFormatType.DoubleSixtyFour:
-                    timestamp = DllHandler.lsl_pull_sample_d(Obj, _genericSampleBuffer.DoubleBuffer, _genericSampleBuffer.DoubleBufferCount, timeout, ref ec);
+                    timestamp = DllHandler.lsl_pull_sample_d(Obj, _sampleBuffer.DoubleBuffer, _sampleBuffer.DoubleBufferCount, timeout, ref ec);
                     break;
                 case ChannelFormatType.IntThirtyTwo:
-                    timestamp = DllHandler.lsl_pull_sample_i(Obj, _genericSampleBuffer.IntBuffer, _genericSampleBuffer.IntBufferCount, timeout, ref ec);
+                    timestamp = DllHandler.lsl_pull_sample_i(Obj, _sampleBuffer.IntBuffer, _sampleBuffer.IntBufferCount, timeout, ref ec);
                     break;
                 case ChannelFormatType.IntSixteen:
-                    timestamp = DllHandler.lsl_pull_sample_s(Obj, _genericSampleBuffer.ShortBuffer, _genericSampleBuffer.ShortBufferCount, timeout, ref ec);
+                    timestamp = DllHandler.lsl_pull_sample_s(Obj, _sampleBuffer.ShortBuffer, _sampleBuffer.ShortBufferCount, timeout, ref ec);
                     break;
                 case ChannelFormatType.IntEight:
-                    timestamp = DllHandler.lsl_pull_sample_c(Obj, _genericSampleBuffer.CharBuffer, _genericSampleBuffer.CharBufferCount, timeout, ref ec);
+                    timestamp = DllHandler.lsl_pull_sample_c(Obj, _sampleBuffer.CharBuffer, _sampleBuffer.CharBufferCount, timeout, ref ec);
                     break;
             }
             Error.Check(ec);
@@ -99,19 +99,19 @@ namespace LibLSL
                 switch (sample)
                 {
                     case List<double>:
-                        sample.Add((T)(object)BitConverter.ToDouble(_genericSampleBuffer, ch * StreamInfo.ChannelFormat.Size));
+                        sample.Add((T)(object)BitConverter.ToDouble(_sampleBuffer, ch * StreamInfo.ChannelFormat.Size));
                         break;
                     case List<float>:
-                        sample.Add((T)(object)BitConverter.ToSingle(_genericSampleBuffer, ch * StreamInfo.ChannelFormat.Size));
+                        sample.Add((T)(object)BitConverter.ToSingle(_sampleBuffer, ch * StreamInfo.ChannelFormat.Size));
                         break;
                     case List<int>:
-                        sample.Add((T)(object)BitConverter.ToInt32(_genericSampleBuffer, ch * StreamInfo.ChannelFormat.Size));
+                        sample.Add((T)(object)BitConverter.ToInt32(_sampleBuffer, ch * StreamInfo.ChannelFormat.Size));
                         break;
                     case List<short>:
-                        sample.Add((T)(object)BitConverter.ToInt16(_genericSampleBuffer, ch * StreamInfo.ChannelFormat.Size));
+                        sample.Add((T)(object)BitConverter.ToInt16(_sampleBuffer, ch * StreamInfo.ChannelFormat.Size));
                         break;
                     case List<char>:
-                        sample.Add((T)(object)BitConverter.ToChar(_genericSampleBuffer, ch * StreamInfo.ChannelFormat.Size));
+                        sample.Add((T)(object)BitConverter.ToChar(_sampleBuffer, ch * StreamInfo.ChannelFormat.Size));
                         break;
                 }
             }
@@ -183,7 +183,7 @@ namespace LibLSL
             catch (InternalException ex)
             {
                 throw (new InternalException(ex.Message));
-            }   
+            }
         }
 
         public int PullChunk<T>(T[,] data, double[] timestamps, double timeout = 0.0) where T : struct

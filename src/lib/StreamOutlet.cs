@@ -1,5 +1,6 @@
 ﻿using System;
 using LibLSL.Internal;
+using LibLSL.Properties;
 
 namespace LibLSL
 {
@@ -44,6 +45,15 @@ namespace LibLSL
 
         public void PushSample(string[] data, double timestamp = 0.0, bool pushthrough = true) =>
             Error.Check(DllHandler.lsl_push_sample_strtp(Obj, data, timestamp, pushthrough ? 1 : 0));
+
+        public void PushSample(string sample, double timestamp = 0.0, bool pushthrough = true)
+        {
+            if (Info.Channels != 1)
+                throw new InternalException(ExceptionMessages.CannotSendSingletonStringMarker);
+            var tmp = new string[1];
+            tmp[0] = sample;
+            Error.Check(DllHandler.lsl_push_sample_strtp(Obj, tmp, timestamp, pushthrough ? 1 : 0));
+        }
 
         public void PushChunk<T>(T[,] data, double timestamp = 0.0, bool pushthrough = true) where T : struct
         {

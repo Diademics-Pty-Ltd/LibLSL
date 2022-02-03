@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace LibLSL.Internal
 {
     [StructLayout(LayoutKind.Explicit, Pack = 2)]
-    internal class GenericSampleBuffer
+    internal class GenericListsToArrays
     {
         [FieldOffset(0)]
         public int _numberOfBytes;
@@ -23,7 +23,7 @@ namespace LibLSL.Internal
         [FieldOffset(8)]
         private readonly long[] _longBuffer;
 
-        public GenericSampleBuffer(int sizeToAllocateInBytes)
+        public GenericListsToArrays(int sizeToAllocateInBytes)
         {
             int aligned4Bytes = sizeToAllocateInBytes % 4;
             sizeToAllocateInBytes = (aligned4Bytes == 0) ? sizeToAllocateInBytes : sizeToAllocateInBytes + 4 - aligned4Bytes;
@@ -32,31 +32,31 @@ namespace LibLSL.Internal
             _numberOfBytes = _byteBuffer.Length;
         }
 
-        public static implicit operator byte[](GenericSampleBuffer genericSampleBuffer)
+        public static implicit operator byte[](GenericListsToArrays genericSampleBuffer)
         {
             return genericSampleBuffer._byteBuffer;
         }
-        public static implicit operator float[](GenericSampleBuffer genericSampleBuffer)
+        public static implicit operator float[](GenericListsToArrays genericSampleBuffer)
         {
             return genericSampleBuffer._floatBuffer;
         }
-        public static implicit operator double[](GenericSampleBuffer genericSampleBuffer)
+        public static implicit operator double[](GenericListsToArrays genericSampleBuffer)
         {
             return genericSampleBuffer._doubleBuffer;
         }
-        public static implicit operator int[](GenericSampleBuffer genericSampleBuffer)
+        public static implicit operator int[](GenericListsToArrays genericSampleBuffer)
         {
             return genericSampleBuffer._intBuffer;
         }
-        public static implicit operator short[](GenericSampleBuffer genericSampleBuffer)
+        public static implicit operator short[](GenericListsToArrays genericSampleBuffer)
         {
             return genericSampleBuffer._shortBuffer;
         }
-        public static implicit operator char[](GenericSampleBuffer genericSampleBuffer)
+        public static implicit operator char[](GenericListsToArrays genericSampleBuffer)
         {
             return genericSampleBuffer._charBuffer;
         }
-        public static implicit operator long[](GenericSampleBuffer genericSampleBuffer)
+        public static implicit operator long[](GenericListsToArrays genericSampleBuffer)
         {
             return genericSampleBuffer._longBuffer;
         }

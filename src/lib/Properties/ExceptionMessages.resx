@@ -123,6 +123,9 @@
   <data name="Argument" xml:space="preserve">
     <value>An argument was incorrectly specified (e.g., wrong format or wrong length).</value>
   </data>
+  <data name="CannotSendSingletonStringMarker" xml:space="preserve">
+    <value>The outlet under operation has more than 1 channel. Input must be an array of strings. </value>
+  </data>
   <data name="Internal" xml:space="preserve">
     <value>An internal internal error has occurred.</value>
   </data>

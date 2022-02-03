@@ -79,6 +79,15 @@ namespace LibLSL.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The outlet under operation has more than 1 channel. Input must be an array of strings. .
+        /// </summary>
+        internal static string CannotSendSingletonStringMarker {
+            get {
+                return ResourceManager.GetString("CannotSendSingletonStringMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An internal internal error has occurred..
         /// </summary>
         internal static string Internal {
