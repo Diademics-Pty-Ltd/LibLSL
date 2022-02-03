@@ -103,24 +103,23 @@ namespace SendDataWPF
 
     internal class LSLSendSimulatorM
     {
+        public bool SendRandomMarkers { get; set; }
+        private object Sync { get; set; } = new();
+        private StreamOutlet _markerOutlet = null;
 
         private CancellationTokenSource _cancellationTokenSource;
 
-        public LSLSendSimulatorM()
-        {
-
-        }
-
         public async Task StartSenderAsync(string name, string type, int channels, double samplingRate, ChannelFormatType channelFormatType, string uniqueID, int chunkSize, bool sinusChecked)
         {
+            if (_markerOutlet != null) _markerOutlet.Dispose();
             _cancellationTokenSource = new();
             using StreamInfo simulatorInfo = new(name,
                  type, channels, samplingRate, channelFormatType, uniqueID);
             using StreamInfo markerInfo = new(name + "Mrkrs",
                  "Markers", 1, 0, ChannelFormatType.StringType, uniqueID + "Mrkrs");
             using StreamOutlet simulatorOutlet = new(simulatorInfo, chunkSize);
-            using StreamOutlet markerOutlet = new(markerInfo);
-            await Task.Run(() => SendData(simulatorOutlet, markerOutlet, channels, chunkSize, channelFormatType, sinusChecked, samplingRate));
+            _markerOutlet = new(markerInfo);
+            await Task.Run(() => SendData(simulatorOutlet, _markerOutlet, channels, chunkSize, channelFormatType, sinusChecked, samplingRate));
         }
 
         public void StopSender() => _cancellationTokenSource.Cancel();
@@ -128,43 +127,48 @@ namespace SendDataWPF
         private void SendData(StreamOutlet eegOutlet, StreamOutlet markerOutlet, int channels, int chunkSize, ChannelFormatType channelFormatType, bool sinusChecked, double samplingRate)
         {
             //string[] randomMarkers = new string[] { "1", "23skidoo", "lala" };
-            string[] oneZeroMarkers = new string[] { "0", "1" };
+            string[] markers = new string[] { "dog", "cat", "dolphin", "llama" };
             int markerIndex = 0;
-            string[] markerOut = new string[1];
+            string markerOut;
             Random random = new();
             using DataGenerator dataGenerator = new(channels, chunkSize, sinusChecked, samplingRate);
             while (true)
             {
-                if (_cancellationTokenSource.Token.IsCancellationRequested)
-                    break;
-                switch (channelFormatType)
+                lock (Sync)
                 {
-                    case ChannelFormatType.DoubleSixtyFour:
-                        eegOutlet.PushChunk(dataGenerator.GenerateDoubleData());
+                    if (_cancellationTokenSource.Token.IsCancellationRequested)
                         break;
-                    case ChannelFormatType.FloatThirtyTwo:
-                        eegOutlet.PushChunk(dataGenerator.GenerateFloatData());
-                        break;
-                    case ChannelFormatType.IntThirtyTwo:
-                        eegOutlet.PushChunk(dataGenerator.GenerateIntData());
-                        break;
-                    case ChannelFormatType.StringType:
-                    case ChannelFormatType.IntSixteen:
-                    case ChannelFormatType.IntEight:
-                    case ChannelFormatType.IntSixtyFour:
-                    case ChannelFormatType.UndefinedType:
-                    default:
-                        break;
-                }
-                if (random.Next(500) > 495)
-                {
-                    //markerOut[0] = randomMarkers[random.Next(randomMarkers.Length)];
-                    markerOut[0] = oneZeroMarkers[markerIndex];
-                    markerIndex = markerIndex == 0 ? 1 : 0;
-                    markerOutlet.PushSample(markerOut);
+                    switch (channelFormatType)
+                    {
+                        case ChannelFormatType.DoubleSixtyFour:
+                            eegOutlet.PushChunk(dataGenerator.GenerateDoubleData());
+                            break;
+                        case ChannelFormatType.FloatThirtyTwo:
+                            eegOutlet.PushChunk(dataGenerator.GenerateFloatData());
+                            break;
+                        case ChannelFormatType.IntThirtyTwo:
+                            eegOutlet.PushChunk(dataGenerator.GenerateIntData());
+                            break;
+                        case ChannelFormatType.StringType:
+                        case ChannelFormatType.IntSixteen:
+                        case ChannelFormatType.IntEight:
+                        case ChannelFormatType.IntSixtyFour:
+                        case ChannelFormatType.UndefinedType:
+                        default:
+                            break;
+                    }
+                    if ((random.Next(500) > 480) && SendRandomMarkers)
+                    {
+                        markerOut = markers[markerIndex];
+                        markerIndex++;
+                        if (markerIndex >= markers.Length) markerIndex -= markers.Length;
+                        markerOutlet!.PushSample(markerOut);
+                    }
                 }
                 Thread.Sleep((int)(1000.0 / samplingRate) * chunkSize);
             }
         }
+
+        public void SendMarker(string markerValue) => _markerOutlet!.PushSample(markerValue);
     }
 }

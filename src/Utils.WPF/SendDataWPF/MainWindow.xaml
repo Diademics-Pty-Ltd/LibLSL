@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SendDataWPF"
         mc:Ignorable="d"
-        Title="SendData" Height="220" Width="697"
+        Title="SendData" Height="255" Width="697"
         d:DataContext="{d:DesignInstance local:ViewModel}" 
         x:ClassModifier="internal">
     <Window.Resources>
@@ -15,6 +15,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -84,7 +85,38 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <StackPanel Grid.Row="2"
+        <GroupBox Grid.Row="2"
+                   BorderThickness="1"
+                  Header="Marker Output"
+                  Margin="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           Margin="3"
+                           Text="Automatic random"/>
+                <CheckBox Grid.Column="1"
+                          Margin="3"
+                          IsChecked="{Binding RandomMarkerChecked}"/>
+                <TextBox Grid.Column="2"
+                         Margin="3"
+                         IsEnabled="{Binding ManualMarkersEnabled}"
+                         Text="{Binding MarkerText, Mode=OneWayToSource}">
+                </TextBox>
+                <Button Grid.Column="3"
+                        Content="Send Manual Marker"
+                        Margin="3"
+                        IsEnabled="{Binding ManualMarkersEnabled}"
+                        Command="{Binding SendManualMarker}">
+                    
+                </Button>
+            </Grid>
+        </GroupBox>
+        <StackPanel Grid.Row="3"
                     Orientation="Horizontal"
                     HorizontalAlignment="Stretch">
             <GroupBox BorderThickness="1"
@@ -122,7 +154,7 @@
                     Content="{Binding SendText}"
                     Command="{Binding SendPressed}"/>
         </StackPanel>
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="4">
             <!--<GroupBox BorderThickness="1"
                   Header="Arc Connections Status"
                   Margin="6"

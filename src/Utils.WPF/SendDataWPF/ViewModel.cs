@@ -47,6 +47,9 @@ namespace SendDataWPF
         private double _samplingRate = 500.0;
         private ChannelFormatItem _channelFormatItem;
         private string _uniqueID = "QWERTY1234";
+        private bool _randomMarkerChecked;
+        private bool _manualMarkersEnabled=true;
+        private string _markerText;
         private bool _sinusChecked = true;
         private bool _randomChecked;
         private int _chunkSize = 10;
@@ -56,7 +59,8 @@ namespace SendDataWPF
         private string _statusState = StatusMessages.Idle;
         private bool _runProgressBar;
 
-        public ICommand SendPressed => new Command(async _ => await SendPressedImplAsync());
+        public ICommand SendPressed => new Command(async _ => await OnSendPressedAsync());
+        public ICommand SendManualMarker => new Command(_ => OnSendManualMarker());
         public string Name
         {
             get => _name;
@@ -115,7 +119,26 @@ namespace SendDataWPF
             get => _uniqueID;
             set => Update(ref _uniqueID, value);
         }
-
+        public bool RandomMarkerChecked
+        {
+            get => _randomMarkerChecked;
+            set
+            {
+                Update(ref _randomMarkerChecked, value);
+                ManualMarkersEnabled = !value;
+                _lslSendSimulatorM.SendRandomMarkers = value;
+            }
+        }
+        public bool ManualMarkersEnabled
+        {
+            get => _manualMarkersEnabled;
+            set => Update(ref _manualMarkersEnabled, value);
+        }
+        public string MarkerText
+        {
+            get => _markerText;
+            set => Update(ref _markerText, value);
+        }
         public bool SinusChecked
         {
             get => _sinusChecked;
@@ -178,7 +201,7 @@ namespace SendDataWPF
             _channelFormatItem = ChannelFormatItems[0];
         }
 
-        private async Task SendPressedImplAsync()
+        private async Task OnSendPressedAsync()
         {
             if (string.Compare(SendText, ButtonTexts.SendData, StringComparison.Ordinal) == 0)
             {
@@ -197,7 +220,10 @@ namespace SendDataWPF
                 IsIdle = true;
             }
         }
-
+        private void OnSendManualMarker()
+        {
+            _lslSendSimulatorM.SendMarker(MarkerText);
+        }
 
     }
 }
