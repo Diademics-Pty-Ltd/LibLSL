@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31313.79
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LSL-dotnet", "..\src\lib\LSL-dotnet.csproj", "{6C3568DB-06C3-4B9C-9961-55D37E7559E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibLSL", "..\src\lib\LibLSL.csproj", "{6C3568DB-06C3-4B9C-9961-55D37E7559E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{9695466F-B7EF-46D7-BE9C-EAAD9803B0D1}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils.WPF", "Utils.WPF", "{F61492CD-F71E-404E-B892-AB5306D35060}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendDataWPF", "..\src\Utils.WPF\SendDataWPF\SendDataWPF.csproj", "{40FD22D5-E891-4F61-86F4-6CC896AAB8CA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceiveDataInChunksWithList", "..\src\Examples\ReceiveDataInChunksWithList\ReceiveDataInChunksWithList.csproj", "{28269540-272D-4C9C-B245-E432D32BCD64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{40FD22D5-E891-4F61-86F4-6CC896AAB8CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40FD22D5-E891-4F61-86F4-6CC896AAB8CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40FD22D5-E891-4F61-86F4-6CC896AAB8CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28269540-272D-4C9C-B245-E432D32BCD64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28269540-272D-4C9C-B245-E432D32BCD64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28269540-272D-4C9C-B245-E432D32BCD64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28269540-272D-4C9C-B245-E432D32BCD64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{7BD650CA-73CA-4071-9FAC-11DD7EE38549} = {9695466F-B7EF-46D7-BE9C-EAAD9803B0D1}
 		{F994BFA8-042A-494A-88A1-B6E51F6A38A5} = {9695466F-B7EF-46D7-BE9C-EAAD9803B0D1}
 		{40FD22D5-E891-4F61-86F4-6CC896AAB8CA} = {F61492CD-F71E-404E-B892-AB5306D35060}
+		{28269540-272D-4C9C-B245-E432D32BCD64} = {9695466F-B7EF-46D7-BE9C-EAAD9803B0D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0E3339AC-EA5E-434B-A2E4-AD090108A947}

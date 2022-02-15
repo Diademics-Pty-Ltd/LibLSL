@@ -10,7 +10,7 @@ namespace LibLSL
 
         public bool HaveConsumers => DllHandler.lsl_have_consumers(Obj) > 0;
 
-        public StreamInfo Info => new(DllHandler.lsl_get_info(Obj));
+        public StreamInfo StreamInfo => new(DllHandler.lsl_get_info(Obj));
 
         public bool WaitForConsumers(double timeout = LSLConstants.Forever) => DllHandler.lsl_wait_for_consumers(Obj, timeout) > 0;
 
@@ -48,7 +48,7 @@ namespace LibLSL
 
         public void PushSample(string sample, double timestamp = 0.0, bool pushthrough = true)
         {
-            if (Info.Channels != 1)
+            if (StreamInfo.Channels != 1)
                 throw new InternalException(ExceptionMessages.CannotSendSingletonStringMarker);
             var tmp = new string[1];
             tmp[0] = sample;

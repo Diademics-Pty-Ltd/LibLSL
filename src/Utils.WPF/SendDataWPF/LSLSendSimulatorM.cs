@@ -10,7 +10,6 @@ namespace SendDataWPF
         private readonly int _channels;
         private readonly int _chunkSize;
         private readonly bool _isSinus;
-        private readonly double _samplingRate;
         private readonly int[,] _intData;
         private readonly float[,] _floatData;
         private readonly double[,] _doubleData;
@@ -24,7 +23,6 @@ namespace SendDataWPF
             _channels = channels;
             _chunkSize = chunkSize;
             _isSinus = isSinus;
-            _samplingRate = samplingRate;
             _phaseIncrement = 2.0 * Math.PI / samplingRate;
             _intData = new int[chunkSize, channels];
             _floatData = new float[chunkSize, channels];
@@ -167,6 +165,7 @@ namespace SendDataWPF
                 }
                 Thread.Sleep((int)(1000.0 / samplingRate) * chunkSize);
             }
+            _markerOutlet.Dispose();
         }
 
         public void SendMarker(string markerValue) => _markerOutlet!.PushSample(markerValue);

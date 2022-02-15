@@ -176,7 +176,7 @@ namespace LibLSL
                 double timestamp;
                 while ((timestamp = PullSample(sample, timeout)) != 0)
                 {
-                    data.Add(sample);
+                    data.Add(new List<T>(sample));
                     timestamps.Add(timestamp);
                 }
             }
