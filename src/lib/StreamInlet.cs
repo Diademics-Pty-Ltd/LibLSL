@@ -9,6 +9,7 @@ namespace LibLSL
     {
         private PostProcessingOptions _postProcessingOptions;
         private readonly GenericListsToArrays _sampleBuffer;
+        private readonly int _maxChunkLength;
 
         public int SamplesAvailable => (int)DllHandler.lsl_samples_available(Obj);
         public bool WasClockReset => DllHandler.lsl_was_clock_reset(Obj) != 0;
@@ -34,6 +35,7 @@ namespace LibLSL
             StreamInfo = new(res);
             PostProcessingOptions = postProcessingOptions;
             _sampleBuffer = new(streamInfo.Channels * streamInfo.ChannelFormat.Size);
+            _maxChunkLength = maxChunkLength;
         }
 
         public void OpenStream(double timeout = LSLConstants.Forever)
@@ -171,13 +173,19 @@ namespace LibLSL
             {
                 data.Clear();
                 timestamps.Clear();
-
+                int counter = 0;
                 List<T> sample = new();
                 double timestamp;
-                while ((timestamp = PullSample(sample, timeout)) != 0)
+                while (_maxChunkLength == 0 || counter < _maxChunkLength)
                 {
-                    data.Add(new List<T>(sample));
-                    timestamps.Add(timestamp);
+                    while ((timestamp = PullSample(sample, timeout)) != 0)
+                    {
+                        data.Add(new List<T>(sample));
+                        timestamps.Add(timestamp);
+                        counter++;
+                        if (counter == _maxChunkLength) break;
+                    }
+                    if (timestamp == 0) break;
                 }
             }
             catch (InternalException ex)

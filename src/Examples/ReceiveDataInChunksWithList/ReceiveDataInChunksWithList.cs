@@ -19,7 +19,7 @@ namespace Examples
             try
             {
                 IReadOnlyList<StreamInfo> streamInfos = LSLUtils.ResolveStreams("type", "EEG");
-                _streamInlet = new(streamInfos[0]);
+                _streamInlet = new(streamInfos[0], maxChunkLength: 5);
                 _samples = new();
                 _timestamps = new();
             }
@@ -59,7 +59,7 @@ namespace Examples
     internal class Program
     {
         private static Action<List<List<float>>, List<double>> PrintFormattedSamples => (samples, timestamp) =>
-            Console.WriteLine($"Received value {samples[0][0]} on channel 0 at time {timestamp[0]}");
+            Console.WriteLine($"Received {samples.Count} values, first: {samples[0][0]} on channel 0 at time {timestamp[0]}");
 
         public static void Main()
         {

@@ -66,7 +66,7 @@ namespace SendDataWPF
             {
                 for (int j = 0; j < _channels; j++)
                 {
-                    datum = _isSinus ? (float)(1000.0 * (Math.Sin(_frequencyMultipliers[j] * _phase) + 1.0)) : _random.Next(0, 999);
+                    datum = _isSinus ? (float)(1 * (Math.Sin(_frequencyMultipliers[j] * _phase) + 0.0)) : _random.Next(0, 999);
                     _floatData[i, j] = datum;
                 }
                 _phase += _phaseIncrement;
