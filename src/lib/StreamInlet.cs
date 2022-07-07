@@ -1,5 +1,5 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using LibLSL.Internal;
+using System;
 using System.Collections.Generic;
 using LibLSL.Internal;
 using System.Linq;
@@ -217,6 +217,28 @@ namespace LibLSL
                     break;
                 default:
                     break;
+            }
+            Error.Check(ec);
+            return (int)res / data.GetLength(1);
+        }
+
+        public int PullChunk(string[,] data, double[] timestamps, double timeout = 0.0)
+        {
+            int ec = 0;
+            uint res = 0;
+            var tmp = new IntPtr[data.GetLength(0), data.GetLength(1)];
+            res = DllHandler.lsl_pull_chunk_str(Obj, tmp, timestamps, (uint)tmp.Length, (uint)timestamps.Length, timeout, ref ec);
+            try
+            {
+                for (int s = 0; s < tmp.GetLength(0); s++)
+                    for (int ch = 0; ch < tmp.GetLength(1); ch++)
+                        data[s, ch] = Marshal.PtrToStringAnsi(tmp[s, ch]);
+            }
+            finally
+            {
+                for (int s = 0; s < tmp.GetLength(0); s++)
+                    for (int ch = 0; ch < tmp.GetLength(1); ch++)
+                        DllHandler.lsl_destroy_string(tmp[s, ch]);
             }
             Error.Check(ec);
             return (int)res / data.GetLength(1);
