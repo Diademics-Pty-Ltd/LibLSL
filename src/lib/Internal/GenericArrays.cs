@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace LibLSL.Internal
 {
     [StructLayout(LayoutKind.Explicit, Pack = 2)]
-    internal class GenericListsToArrays
+    internal class GenericArrays
     {
         [FieldOffset(0)]
         public int _numberOfBytes;
@@ -22,41 +22,44 @@ namespace LibLSL.Internal
         private readonly char[] _charBuffer;
         [FieldOffset(8)]
         private readonly long[] _longBuffer;
+        [FieldOffset(16)]
+        private readonly float[] _castFloatBuffer;
 
-        public GenericListsToArrays(int sizeToAllocateInBytes)
+        public GenericArrays(int sizeToAllocateInBytes)
         {
             int aligned4Bytes = sizeToAllocateInBytes % 4;
             sizeToAllocateInBytes = (aligned4Bytes == 0) ? sizeToAllocateInBytes : sizeToAllocateInBytes + 4 - aligned4Bytes;
             // Allocating the byteBuffer is co-allocating the floatBuffer and the intBuffer
             _byteBuffer = new byte[sizeToAllocateInBytes];
             _numberOfBytes = _byteBuffer.Length;
+            _castFloatBuffer = new float[sizeToAllocateInBytes / 4];
         }
 
-        public static implicit operator byte[](GenericListsToArrays genericSampleBuffer)
+        public static implicit operator byte[](GenericArrays genericSampleBuffer)
         {
             return genericSampleBuffer._byteBuffer;
         }
-        public static implicit operator float[](GenericListsToArrays genericSampleBuffer)
+        public static implicit operator float[](GenericArrays genericSampleBuffer)
         {
             return genericSampleBuffer._floatBuffer;
         }
-        public static implicit operator double[](GenericListsToArrays genericSampleBuffer)
+        public static implicit operator double[](GenericArrays genericSampleBuffer)
         {
             return genericSampleBuffer._doubleBuffer;
         }
-        public static implicit operator int[](GenericListsToArrays genericSampleBuffer)
+        public static implicit operator int[](GenericArrays genericSampleBuffer)
         {
             return genericSampleBuffer._intBuffer;
         }
-        public static implicit operator short[](GenericListsToArrays genericSampleBuffer)
+        public static implicit operator short[](GenericArrays genericSampleBuffer)
         {
             return genericSampleBuffer._shortBuffer;
         }
-        public static implicit operator char[](GenericListsToArrays genericSampleBuffer)
+        public static implicit operator char[](GenericArrays genericSampleBuffer)
         {
             return genericSampleBuffer._charBuffer;
         }
-        public static implicit operator long[](GenericListsToArrays genericSampleBuffer)
+        public static implicit operator long[](GenericArrays genericSampleBuffer)
         {
             return genericSampleBuffer._longBuffer;
         }
@@ -82,7 +85,7 @@ namespace LibLSL.Internal
         public int DoubleBufferCount
         {
             get => _numberOfBytes / 8;
-            set => _numberOfBytes = CheckValidityCount("DoubleBufferCount", value, 4);
+            set => _numberOfBytes = CheckValidityCount("DoubleBufferCount", value, 8);
         }
         public int IntBufferCount
         {

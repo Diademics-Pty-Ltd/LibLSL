@@ -17,7 +17,12 @@ namespace Examples
             _onPull = onPull;
             try
             {
-                IReadOnlyList<StreamInfo> streamInfos = LSLUtils.ResolveStreams("type", "EEG");
+                IReadOnlyList<StreamInfo> streamInfos = LSLUtils.ResolveStreams("type", "Markers");
+                if(streamInfos.Count==0)
+                {
+                    Console.WriteLine("No stream of type Markers available. Exiting program.");
+                    return;
+                }    
                 _streamInlet = new(streamInfos[0]);
                 _markers = new string[streamInfos[0].Channels];
             }

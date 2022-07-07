@@ -1,0 +1,62 @@
+﻿<Window x:Class="MouseKeyboardWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MouseKeyboardWPF"
+        mc:Ignorable="d"
+        Title="Mouse and Keyboard LSL" Height="225" Width="400"
+        d:DataContext="{d:DesignInstance local:ViewModel}" 
+        x:ClassModifier="internal">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0">
+        <MenuItem Header="File">
+            </MenuItem>
+        </Menu>
+        <GroupBox Grid.Row="1"
+                  Grid.Column="0"
+                  BorderThickness="1"
+                  Header="Linking"
+                  Margin="3">
+            <StackPanel>
+                <Button Content="{Binding LinkKeyboardEventsContent}"
+                        Command="{Binding LinkKeyboardEvents}"
+                        Margin="3"/>
+                <Button Content="{Binding LinkMouseEventsContent}"
+                        Command="{Binding LinkMouseEvents}"
+                        Margin="3"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Grid.Row="1"
+                  Grid.Column="1"
+                  BorderThickness="1"
+                  Header="Output"
+                  Margin="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ScrollViewer Grid.Row="0"
+                    VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto">
+                    <TextBox IsReadOnly="True"
+                             
+                     Text="{Binding LatestOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </ScrollViewer>
+                <CheckBox Grid.Row="1"
+                    Content="Print Output"
+                          IsChecked="{Binding PrintOutput}">
+                </CheckBox>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

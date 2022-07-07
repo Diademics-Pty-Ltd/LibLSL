@@ -2,13 +2,14 @@
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using LibLSL.Internal;
+using System.Linq;
 
 namespace LibLSL
 {
     public class StreamInlet : LSLObject
     {
         private PostProcessingOptions _postProcessingOptions;
-        private readonly GenericListsToArrays _sampleBuffer;
+        private readonly GenericArrays _sampleBuffer;
         private readonly int _maxChunkLength;
 
         public int SamplesAvailable => (int)DllHandler.lsl_samples_available(Obj);
@@ -79,6 +80,8 @@ namespace LibLSL
                 case ChannelFormatType.IntEight:
                     timestamp = DllHandler.lsl_pull_sample_c(Obj, _sampleBuffer.CharBuffer, _sampleBuffer.CharBufferCount, timeout, ref ec);
                     break;
+                default:
+                    break;
             }
             Error.Check(ec);
             return timestamp;
@@ -119,6 +122,7 @@ namespace LibLSL
             }
             return timestamp;
         }
+
 
         public double PullSample<T>(T[] sample, double timeout = LSLConstants.Forever) where T : struct
         {
@@ -172,20 +176,16 @@ namespace LibLSL
             try
             {
                 data.Clear();
+                List<T> sample = new();
                 timestamps.Clear();
                 int counter = 0;
-                List<T> sample = new();
                 double timestamp;
-                while (_maxChunkLength == 0 || counter < _maxChunkLength)
+                while ((timestamp = PullSample(sample, timeout)) != 0)
                 {
-                    while ((timestamp = PullSample(sample, timeout)) != 0)
-                    {
-                        data.Add(new List<T>(sample));
-                        timestamps.Add(timestamp);
-                        counter++;
-                        if (counter == _maxChunkLength) break;
-                    }
-                    if (timestamp == 0) break;
+                    data.Add(sample);
+                    timestamps.Add(timestamp);
+                    counter++;
+                    if (counter == _maxChunkLength && _maxChunkLength != 0) break;
                 }
             }
             catch (InternalException ex)

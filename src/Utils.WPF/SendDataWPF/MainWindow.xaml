@@ -126,13 +126,13 @@
                     <RadioButton GroupName="style"
                              Content="Sinus"
                              Margin="5"
-                             IsChecked="{Binding SinusChecked}"
-                                 IsEnabled="{Binding IsIdle}"/>
+                             IsChecked="{Binding SinusChecked, Converter={StaticResource BoolRadioConverter}}"
+                             IsEnabled="{Binding IsIdle}"/>
                     <RadioButton GroupName="style"
                              Content="Random"
                              Margin="5"
                              IsChecked="{Binding RandomChecked, Converter={StaticResource BoolRadioConverter}}"
-                                  IsEnabled="{Binding IsIdle}"/>
+                             IsEnabled="{Binding IsIdle}"/>
                 </StackPanel>
             </GroupBox>
             <StackPanel Orientation="Horizontal"

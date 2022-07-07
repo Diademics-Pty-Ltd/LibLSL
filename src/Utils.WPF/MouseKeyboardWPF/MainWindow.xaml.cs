@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace SendDataWPF
+namespace MouseKeyboardWPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

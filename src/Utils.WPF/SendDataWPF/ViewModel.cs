@@ -23,8 +23,7 @@ namespace SendDataWPF
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             bool boolValue = (bool)value;
-
-            return !boolValue ? null : !this.Inverse;
+            return !boolValue ? Inverse : !Inverse;
         }
     }
 
