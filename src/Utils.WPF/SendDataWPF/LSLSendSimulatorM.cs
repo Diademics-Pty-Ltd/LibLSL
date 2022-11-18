@@ -27,13 +27,13 @@ namespace SendDataWPF
             _intData = new int[chunkSize, channels];
             _floatData = new float[chunkSize, channels];
             _doubleData = new double[chunkSize, channels];
-            int frequencyBase = 1;
+            double frequencyBase = 1;
             _frequencyMultipliers = new double[channels];
             for (int i = 0; i < channels; i++)
             {
-                _frequencyMultipliers[i] = frequencyBase * (double)(i + 1);
-                while (_frequencyMultipliers[i] >= (samplingRate / 2.2))
-                    _frequencyMultipliers[i] -= 1.8 * samplingRate;
+                _frequencyMultipliers[i] = frequencyBase * (i + 1);
+                //while (_frequencyMultipliers[i] >= (samplingRate / 2.2))
+                    //_frequencyMultipliers[i] -= 1.8 * samplingRate;
             }
             _random = new();
         }
@@ -155,7 +155,7 @@ namespace SendDataWPF
                         default:
                             break;
                     }
-                    if ((random.Next(500) > 480) && SendRandomMarkers)
+                    if ((random.Next(100) > 98) && SendRandomMarkers)
                     {
                         markerOut = markers[markerIndex];
                         markerIndex++;
@@ -163,7 +163,7 @@ namespace SendDataWPF
                         markerOutlet!.PushSample(markerOut);
                     }
                 }
-                Thread.Sleep((int)(1000.0 / samplingRate) * chunkSize);
+                Thread.Sleep((int)(1000.0/samplingRate) * chunkSize);
             }
             _markerOutlet.Dispose();
         }

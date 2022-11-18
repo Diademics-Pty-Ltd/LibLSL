@@ -1,8 +1,7 @@
 ﻿using LibLSL.Internal;
 using System;
 using System.Collections.Generic;
-using LibLSL.Internal;
-using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace LibLSL
 {

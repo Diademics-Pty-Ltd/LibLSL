@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ReceiveStringMarkers": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
